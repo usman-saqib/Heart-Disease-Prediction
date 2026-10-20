@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-lg border-0">
+            <div class="card-header bg-success text-white text-center py-3">
+                <h4><i class="fas fa-user-plus"></i> Create Account</h4>
+            </div>
+            <div class="card-body p-4">
+                <!-- 
+                    IMPORTANT: 
+                    action="" means form submit ho gi same page par (register).
+                    Method POST hai, jo backend mein 'request.form' se read hogi.
+                -->
+                <form method="POST" action="">
+                    <!-- Username Field -->
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" class="form-control" id="username" name="username" 
+                                   placeholder="Choose a username" required autofocus>
+                        </div>
+                    </div>
+                    
+                    <!-- Email Field -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                            <input type="email" class="form-control" id="email" name="email" 
+                                   placeholder="Enter your email" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Password Field -->
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                            <input type="password" class="form-control" id="password" name="password" 
+                                   placeholder="Min 6 characters" required minlength="6">
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        <div class="form-text">Password must be at least 6 characters.</div>
+                    </div>
+                    
+                    <!-- Confirm Password Field (Sirf front-end validation ke liye) -->
+                    <div class="mb-3">
+                        <label for="confirm_password" class="form-label">Confirm Password</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-check"></i></span>
+                            <input type="password" class="form-control" id="confirm_password" 
+                                   placeholder="Re-enter password" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-user-check"></i> Register
+                        </button>
+                    </div>
+                </form>
+                
+                <hr>
+                <p class="text-center mb-0">
+                    Already have an account? <a href="{{ url_for('login') }}">Login here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

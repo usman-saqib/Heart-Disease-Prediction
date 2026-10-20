@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row align-items-center min-vh-75">
+    <div class="col-lg-6">
+        <h1 class="display-4 fw-bold text-primary">
+            <i class="fas fa-heartbeat text-danger"></i> Heart Disease Predictor
+        </h1>
+        <p class="lead">
+            AI-powered early detection system to assess your heart health risk.
+            Enter your clinical parameters and get an instant prediction with confidence score.
+        </p>
+        <hr class="my-4">
+        <div class="d-flex gap-3 flex-wrap">
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('predict') }}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-stethoscope"></i> Start Prediction
+                </a>
+                <a href="{{ url_for('history') }}" class="btn btn-outline-secondary btn-lg">
+                    <i class="fas fa-history"></i> View History
+                </a>
+            {% else %}
+                <a href="{{ url_for('register') }}" class="btn btn-success btn-lg">
+                    <i class="fas fa-user-plus"></i> Get Started
+                </a>
+                <a href="{{ url_for('login') }}" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-lg-6 d-none d-lg-block">
+        <div class="hero-heart-container">
+            <div class="hero-heart">
+                <i class="fas fa-heart"></i>
+            </div>
+            <div class="hero-glow"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="row mt-5 g-4">
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm border-0 text-center">
+            <div class="card-body">
+                <i class="fas fa-brain fa-3x text-primary mb-3"></i>
+                <h5 class="card-title">AI-Powered</h5>
+                <p class="card-text">Machine learning model trained on 1000+ patient records with 90% accuracy.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm border-0 text-center">
+            <div class="card-body">
+                <i class="fas fa-lock fa-3x text-success mb-3"></i>
+                <h5 class="card-title">Secure & Private</h5>
+                <p class="card-text">Your health data is encrypted and stored safely with user authentication.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm border-0 text-center">
+            <div class="card-body">
+                <i class="fas fa-file-pdf fa-3x text-danger mb-3"></i>
+                <h5 class="card-title">Download Reports</h5>
+                <p class="card-text">Generate professional PDF reports for your records or to share with doctors.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,121 @@
+/* Custom styles for Heart Disease Predictor */
+
+/* General */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.navbar-brand i {
+    margin-right: 8px;
+}
+
+/* Card hover effects */
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.12) !important;
+}
+
+/* Home page illustration placeholder */
+.min-vh-75 {
+    min-height: 75vh;
+}
+
+.hero-heart-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 360px;
+}
+
+.hero-heart {
+    font-size: 220px;
+    color: #e53935;
+    animation: pulseHeart 2.2s infinite ease-in-out;
+    filter: drop-shadow(0 0 25px rgba(229, 57, 53, 0.45));
+    transform: translateZ(0);
+}
+
+.hero-glow {
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 0, 0, 0.18), rgba(255, 0, 0, 0));
+    animation: glowPulse 2.5s infinite ease-in-out;
+}
+
+@keyframes pulseHeart {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}
+
+@keyframes glowPulse {
+    0%, 100% { transform: scale(0.9); opacity: 0.7; }
+    50% { transform: scale(1.1); opacity: 1; }
+}
+
+/* Form styling */
+.input-group-text {
+    background-color: #e9ecef;
+    min-width: 42px;
+    justify-content: center;
+}
+
+/* Flash messages */
+.alert {
+    border-radius: 10px;
+    border-left: 5px solid;
+}
+.alert-success {
+    border-left-color: #28a745;
+}
+.alert-danger {
+    border-left-color: #dc3545;
+}
+.alert-info {
+    border-left-color: #17a2b8;
+}
+
+/* Prediction result badge */
+.badge-result {
+    font-size: 1.1rem;
+    padding: 8px 20px;
+}
+
+/* Table actions */
+.btn-sm i {
+    margin-right: 0;
+}
+
+/* Footer (optional, add in base) */
+.footer {
+    margin-top: auto;
+    background-color: #f1f3f5;
+    padding: 20px 0;
+    border-top: 1px solid #dee2e6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .display-4 {
+        font-size: 2.5rem;
+    }
+    .btn-lg {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+    }
+}
+
+/* Password toggle button */
+#togglePassword {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}

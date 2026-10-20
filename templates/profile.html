@@ -1,0 +1,757 @@
+{% extends "base.html" %}
+
+{% block title %}Your Health Profile{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <h1 class="page-title"><i class="fas fa-user-md" style="color: #3498db;"></i> Your Health Profile</h1>
+    <p class="subtitle">Current symptoms and vitals – click the <span class="info-icon">ⓘ</span> or tap the card for details</p>
+
+    <div class="symptom-grid">
+        <!-- 1. Age -->
+        <div class="symptom-card" onclick="toggleCard(this)">
+            <div class="symptom-header">
+                <div class="symptom-label"><i class="fas fa-calendar-alt"></i> Age</div>
+                <div class="symptom-value">{{ data.age }} years</div>
+                <div class="symptom-range">Range: 18 – 100</div>
+                <span class="expand-icon">▼</span>
+            </div>
+            <div class="symptom-details">
+                <p><strong>Description:</strong> Patient's age in years. Heart disease risk increases with age.</p>
+            </div>
+        </div>
+
+        <!-- 2. Sex -->
+        <div class="symptom-card" onclick="toggleCard(this)">
+            <div class="symptom-header">
+                <div class="symptom-label"><i class="fas fa-venus-mars"></i> Sex</div>
+                <div class="symptom-value">{{ 'Male' if data.sex == 1 else 'Female' }}</div>
+                <div class="symptom-range">(0 = Female, 1 = Male)</div>
+                <span class="expand-icon">▼</span>
+            </div>
+            <div class="symptom-details">
+                <p><strong>Description:</strong> Patient's biological gender – Male or Female.</p>
+            </div>
+        </div>
+
+        <!-- 3. Chest Pain Type -->
+        <div class="symptom-card" onclick="toggleCard(this)">
+            <div class="symptom-header">
+                <div class="symptom-label"><i class="fas fa-heart"></i> Chest Pain Type</div>
+                <div class="symptom-value">
+                    {% set cp_map = {0: 'Typical Angina', 1: 'Atypical Angina', 2: 'Non-anginal Pain', 3: 'Asymptomatic'} %}
+                    {{ cp_map[data.cp] }}
+                </div>
+                <div class="symptom-range">0–3 severity</div>
+                <span class="expand-icon">▼</span>
+            </div>
+            <div class="symptom-details">
+                <p><strong>Description:</strong> Type of chest pain experienced.</p>
+                <ul>
+                    <li><strong>Typical Angina:</strong> Classic chest pain that occurs with exercise/stress and is relieved by rest or medication.</li>
+                    <li><strong>Atypical Angina:</strong> Chest pain that resembles angina but does not fully meet typical criteria.</li>
+                    <li><strong>Non-anginal Pain:</strong> Chest pain not caused by the heart – may originate from muscles, lungs, or stomach.</li>
+                    <li><strong>Asymptomatic:</strong> No chest pain, though heart disease may still be present.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 4. Resting Blood Pressure -->
+        <div class="symptom-card" onclick="toggleCard(this)">
+            <div class="symptom-header">
+                <div class="symptom-label"><i class="fas fa-heartbeat"></i> Resting Blood Pressure</div>
+                <div class="symptom-value">{{ data.trestbps }} mm Hg</div>
+                <div class="symptom-range">Range: 80 – 220</div>
+                <span class="expand-icon">▼</span>
+            </div>
+            <div class="symptom-details">
+                <p><strong>Description:</strong> Blood pressure measured at rest.</p>
+                <ul>
+                    <li><strong>Normal:</strong> Around 120/80 mmHg</li>
+                    <li><strong>High blood pressure</strong> increases heart disease risk.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 5. Cholesterol -->
+        <div class="symptom-card" onclick="toggleCard(this)">
+            <div class="symptom-header">
+                <div class="symptom-label"><i class="fas fa-flask"></i> Cholesterol</div>
+                <div class="symptom-value">{{ data.chol }} mg/dL</div>
+                <div class="symptom-range">Range: 100 – 600</div>
+                <span class="expand-icon">▼</span>
+            </div>
+            <div class="symptom-details">
+                <p><strong>Description:</strong> Amount of cholesterol in the blood.</p>
+                <ul>
+                    <li><strong>Low cholesterol</strong> → Better</li>
+                    <li><strong>High cholesterol</strong> → Heart disease risk increases</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 6. Fasting Blood Sugar -->
+        <div class="symptom-card" onclick="toggleCard(this)">
+            <div class="symptom-header">
+                <div class="symptom-label"><i class="fas fa-droplet"></i> Fasting Blood Sugar</div>
+                <div class="symptom-value">{{ 'Yes' if data.fbs == 1 else 'No' }}</div>
+                <div class="symptom-range">>120 mg/dL? (0=No, 1=Yes)</div>
+                <span class="expand-icon">▼</span>
+            </div>
+            <div class="symptom-details">
+                <p><strong>Description:</strong> Diabetes or high blood sugar is a major risk factor for heart disease.</p>
+                <ul>
+                    <li><strong>Yes:</strong> Blood sugar >120 mg/dL</li>
+                    <li><strong>No:</strong> Blood sugar ≤120 mg/dL</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 7. Resting ECG -->
+        <div class="symptom-card" onclick="toggleCard(this)">
+            <div class="symptom-header">
+                <div class="symptom-label"><i class="fas fa-wave-square"></i> Resting ECG</div>
+                <div class="symptom-value">
+                    {% set ecg_map = {0: 'Normal', 1: 'ST-T Wave Abnormality', 2: 'Left Ventricular Hypertrophy'} %}
+                    {{ ecg_map[data.restecg] }}
+                </div>
+                <div class="symptom-range">0–2 pattern</div>
+                <span class="expand-icon">▼</span>
+            </div>
+            <div class="symptom-details">
+                <p><strong>Description:</strong> Electrocardiogram (ECG) measures heart's electrical activity.</p>
+                <ul>
+                    <li><strong>Normal:</strong> ECG is normal</li>
+                    <li><strong>ST-T Wave Abnormality:</strong> Abnormal changes in ST or T waves may indicate heart problems</li>
+                    <li><strong>Left Ventricular Hypertrophy:</strong> Thickening of the left pumping chamber of the heart</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 8. Maximum Heart Rate -->
+        <div class="symptom-card" onclick="toggleCard(this)">
+            <div class="symptom-header">
+                <div class="symptom-label"><i class="fas fa-bolt"></i> Maximum Heart Rate</div>
+                <div class="symptom-value">{{ data.thalach }} bpm</div>
+                <div class="symptom-range">Range: 60 – 220</div>
+                <span class="expand-icon">▼</span>
+            </div>
+            <div class="symptom-details">
+                <p><strong>Description:</strong> Maximum heart rate achieved during exercise.</p>
+                <ul>
+                    <li><strong>Higher value</strong> generally indicates better exercise tolerance</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 9. Exercise Induced Angina -->
+        <div class="symptom-card" onclick="toggleCard(this)">
+            <div class="symptom-header">
+                <div class="symptom-label"><i class="fas fa-running"></i> Exercise Induced Angina</div>
+                <div class="symptom-value">{{ 'Yes' if data.exang == 1 else 'No' }}</div>
+                <div class="symptom-range">(0=No, 1=Yes)</div>
+                <span class="expand-icon">▼</span>
+            </div>
+            <div class="symptom-details">
+                <p><strong>Description:</strong> Chest pain during exercise can indicate heart disease.</p>
+                <ul>
+                    <li><strong>Yes:</strong> Chest pain occurs during exercise</li>
+                    <li><strong>No:</strong> No chest pain during exercise</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 10. Oldpeak -->
+        <div class="symptom-card" onclick="toggleCard(this)">
+            <div class="symptom-header">
+                <div class="symptom-label"><i class="fas fa-arrow-down"></i> Oldpeak (ST Depression)</div>
+                <div class="symptom-value">{{ data.oldpeak }}</div>
+                <div class="symptom-range">Range: 0.0 – 6.2</div>
+                <span class="expand-icon">▼</span>
+            </div>
+            <div class="symptom-details">
+                <p><strong>Description:</strong> ST segment depression on ECG after exercise.</p>
+                <ul>
+                    <li><strong>0</strong> → Normal</li>
+                    <li><strong>Higher value</strong> → Greater likelihood of reduced blood flow to the heart</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- 11. ST Slope -->
+        <div class="symptom-card" onclick="toggleCard(this)">
+            <div class="symptom-header">
+                <div class="symptom-label"><i class="fas fa-chart-line"></i> ST Slope</div>
+                <div class="symptom-value">
+                    {% set slope_map = {0: 'Upsloping', 1: 'Flat', 2: 'Downsloping'} %}
+                    {{ slope_map[data.slope] }}
+                </div>
+                <div class="symptom-range">0–2 slope type</div>
+                <span class="expand-icon">▼</span>
+            </div>
+            <div class="symptom-details">
+                <p><strong>Description:</strong> Direction of the ST segment on ECG.</p>
+                <ul>
+                    <li><strong>Upsloping (Up):</strong> ST segment rises upward → usually normal or lower heart disease risk</li>
+                    <li><strong>Flat:</strong> ST segment remains horizontal → risk may increase</li>
+                    <li><strong>Downsloping (Down):</strong> ST segment slopes downward → strong indicator of inadequate blood supply to the heart</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+  <!-- ===== Premium Healthy Heart Tips Section ===== -->
+<div class="tips-section-modern">
+    <div class="tips-header-modern">
+        <div class="heart-badge">
+            <i class="fas fa-heartbeat"></i>
+        </div>
+        <h2>Your Heart Health Blueprint</h2>
+        <p class="tips-subtitle-modern">Clinically‑backed habits to protect your most vital organ</p>
+    </div>
+
+    <div class="tips-grid-modern">
+        <div class="tip-card-modern">
+            <div class="tip-icon-modern gradient-blue"><i class="fas fa-utensils"></i></div>
+            <div class="tip-body-modern">
+                <h4>Balanced Nutrition</h4>
+                <p>Prioritise whole foods – fruits, vegetables, lean proteins, and whole grains. Limit saturated and trans fats.</p>
+                <span class="tip-tag">Diet</span>
+            </div>
+        </div>
+
+        <div class="tip-card-modern">
+            <div class="tip-icon-modern gradient-green"><i class="fas fa-walking"></i></div>
+            <div class="tip-body-modern">
+                <h4>Regular Exercise</h4>
+                <p>At least 150 minutes of moderate activity or 75 minutes of vigorous activity per week strengthens your heart.</p>
+                <span class="tip-tag">Fitness</span>
+            </div>
+        </div>
+
+        <div class="tip-card-modern">
+            <div class="tip-icon-modern gradient-red"><i class="fas fa-smoking-ban"></i></div>
+            <div class="tip-body-modern">
+                <h4>Quit Smoking</h4>
+                <p>Smoking is a leading cause of cardiovascular disease. Seek professional support to quit completely.</p>
+                <span class="tip-tag">Habits</span>
+            </div>
+        </div>
+
+        <div class="tip-card-modern">
+            <div class="tip-icon-modern gradient-orange"><i class="fas fa-burger"></i></div>
+            <div class="tip-body-modern">
+                <h4>Limit Junk Food</h4>
+                <p>Cut back on processed foods, sugary drinks, and deep‑fried items. Choose home‑cooked meals with fresh ingredients.</p>
+                <span class="tip-tag">Nutrition</span>
+            </div>
+        </div>
+
+        <div class="tip-card-modern">
+            <div class="tip-icon-modern gradient-purple"><i class="fas fa-salt-shaker"></i></div>
+            <div class="tip-body-modern">
+                <h4>Control Salt & Sugar</h4>
+                <p>Keep sodium under 2,300 mg/day and added sugars below 10% of daily calories to maintain healthy blood pressure.</p>
+                <span class="tip-tag">Intake</span>
+            </div>
+        </div>
+
+        <div class="tip-card-modern">
+            <div class="tip-icon-modern gradient-teal"><i class="fas fa-bed"></i></div>
+            <div class="tip-body-modern">
+                <h4>Quality Sleep</h4>
+                <p>Sleep 7–8 hours nightly. Poor sleep quality is linked to hypertension, diabetes, and heart disease.</p>
+                <span class="tip-tag">Rest</span>
+            </div>
+        </div>
+
+        <div class="tip-card-modern">
+            <div class="tip-icon-modern gradient-pink"><i class="fas fa-spa"></i></div>
+            <div class="tip-body-modern">
+                <h4>Stress Management</h4>
+                <p>Incorporate meditation, deep breathing, or yoga into your routine to lower cortisol and protect your heart.</p>
+                <span class="tip-tag">Mental Health</span>
+            </div>
+        </div>
+
+        <div class="tip-card-modern">
+            <div class="tip-icon-modern gradient-indigo"><i class="fas fa-stethoscope"></i></div>
+            <div class="tip-body-modern">
+                <h4>Regular Check‑ups</h4>
+                <p>Monitor blood pressure, cholesterol, and blood glucose annually. Early detection can save your life.</p>
+                <span class="tip-tag">Prevention</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="profile-actions">
+        <a href="{{ url_for('home') }}" class="btn btn-primary"><i class="fas fa-home"></i> Back to Home</a>
+        <a href="{{ url_for('history') }}" class="btn btn-secondary"><i class="fas fa-history"></i> View History</a>
+    </div>
+</div>
+
+<!-- Complete Styles & JavaScript -->
+<style>
+    /* ===== General ===== */
+    .profile-container {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 20px;
+        animation: fadeInUp 0.8s ease;
+    }
+
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideDown {
+        from { opacity: 0; max-height: 0; transform: translateY(-10px); }
+        to { opacity: 1; max-height: 500px; transform: translateY(0); }
+    }
+
+    @keyframes slideUp {
+        from { opacity: 1; max-height: 500px; transform: translateY(0); }
+        to { opacity: 0; max-height: 0; transform: translateY(-10px); }
+    }
+
+    .page-title {
+        text-align: center;
+        font-size: 2.2rem;
+        color: #2c3e50;
+        margin-bottom: 5px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #7f8c8d;
+        margin-bottom: 30px;
+        font-size: 1rem;
+    }
+
+    .info-icon {
+        color: #3498db;
+        font-weight: bold;
+        cursor: help;
+    }
+
+    /* ===== Cards Grid ===== */
+    .symptom-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .symptom-card {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-left: 5px solid #3498db;
+        cursor: pointer;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .symptom-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    .symptom-card.active {
+        border-left-color: #e74c3c;
+        box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    }
+
+    /* ===== Card Header ===== */
+    .symptom-header {
+        padding: 20px 20px 15px;
+        position: relative;
+        transition: background 0.3s;
+    }
+
+    .symptom-card.active .symptom-header {
+        background: #f8f9fa;
+    }
+
+    .symptom-label {
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: #7f8c8d;
+        margin-bottom: 4px;
+        font-weight: 600;
+    }
+
+    .symptom-label i {
+        margin-right: 5px;
+        color: #3498db;
+    }
+
+    .symptom-value {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 4px;
+    }
+
+    .symptom-range {
+        font-size: 0.8rem;
+        color: #95a5a6;
+        padding-top: 6px;
+        border-top: 1px dashed #ecf0f1;
+    }
+
+    .expand-icon {
+        position: absolute;
+        right: 20px;
+        top: 20px;
+        color: #bdc3c7;
+        font-size: 0.8rem;
+        transition: transform 0.3s ease, color 0.3s;
+    }
+
+    .symptom-card.active .expand-icon {
+        transform: rotate(180deg);
+        color: #3498db;
+    }
+
+    /* ===== Card Details (Expandable) ===== */
+    .symptom-details {
+        max-height: 0;
+        overflow: hidden;
+        padding: 0 20px;
+        transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                    padding 0.3s ease,
+                    opacity 0.3s ease;
+        opacity: 0;
+        background: #f8f9fa;
+    }
+
+    .symptom-card.active .symptom-details {
+        max-height: 600px;
+        padding: 15px 20px 20px;
+        opacity: 1;
+        animation: slideDown 0.5s ease;
+    }
+
+    .symptom-details p {
+        margin-bottom: 8px;
+        color: #2c3e50;
+        font-size: 0.92rem;
+        line-height: 1.5;
+    }
+
+    .symptom-details ul {
+        margin: 8px 0 0;
+        padding-left: 20px;
+        color: #34495e;
+        font-size: 0.88rem;
+        line-height: 1.6;
+    }
+
+    .symptom-details ul li {
+        margin-bottom: 4px;
+    }
+
+    .symptom-details ul li strong {
+        color: #2c3e50;
+    }
+
+ /* ===== Modern Premium Tips Section ===== */
+.tips-section-modern {
+    margin-top: 60px;
+    padding: 50px 30px;
+    background: linear-gradient(145deg, #f0f4f8 0%, #d9e2ec 100%);
+    border-radius: 30px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.06);
+}
+
+/* Animated background "glow" */
+.tips-section-modern::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -10%;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(52, 152, 219, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: floatGlow 8s infinite alternate ease-in-out;
+    pointer-events: none;
+}
+
+.tips-section-modern::after {
+    content: '';
+    position: absolute;
+    bottom: -20%;
+    left: -5%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(231, 76, 60, 0.10) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: floatGlow 10s infinite alternate-reverse ease-in-out;
+    pointer-events: none;
+}
+
+@keyframes floatGlow {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(40px, 30px) scale(1.2); }
+}
+
+.tips-header-modern {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 2;
+}
+
+.heart-badge {
+    display: inline-block;
+    width: 70px;
+    height: 70px;
+    line-height: 70px;
+    font-size: 2.2rem;
+    color: white;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    border-radius: 50%;
+    box-shadow: 0 10px 30px rgba(231, 76, 60, 0.35);
+    margin-bottom: 10px;
+    animation: pulseHeart 2s ease-in-out infinite;
+}
+
+@keyframes pulseHeart {
+    0% { transform: scale(1); box-shadow: 0 10px 30px rgba(231, 76, 60, 0.35); }
+    50% { transform: scale(1.05); box-shadow: 0 15px 45px rgba(231, 76, 60, 0.5); }
+    100% { transform: scale(1); box-shadow: 0 10px 30px rgba(231, 76, 60, 0.35); }
+}
+
+.tips-header-modern h2 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #1a2634;
+    letter-spacing: -0.5px;
+    margin: 0 0 5px;
+}
+
+.tips-subtitle-modern {
+    font-size: 1.05rem;
+    color: #4a5b6e;
+    font-weight: 400;
+    margin: 0;
+}
+
+/* Grid */
+.tips-grid-modern {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 25px;
+    position: relative;
+    z-index: 2;
+}
+
+/* Card */
+.tip-card-modern {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 20px;
+    padding: 22px 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.04);
+    border: 1px solid rgba(255,255,255,0.5);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    opacity: 0;
+    animation: fadeSlideUp 0.7s ease forwards;
+}
+
+/* Stagger */
+.tip-card-modern:nth-child(1) { animation-delay: 0.05s; }
+.tip-card-modern:nth-child(2) { animation-delay: 0.15s; }
+.tip-card-modern:nth-child(3) { animation-delay: 0.25s; }
+.tip-card-modern:nth-child(4) { animation-delay: 0.35s; }
+.tip-card-modern:nth-child(5) { animation-delay: 0.45s; }
+.tip-card-modern:nth-child(6) { animation-delay: 0.55s; }
+.tip-card-modern:nth-child(7) { animation-delay: 0.65s; }
+.tip-card-modern:nth-child(8) { animation-delay: 0.75s; }
+
+@keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(30px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.tip-card-modern:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 20px 45px rgba(0,0,0,0.10);
+    background: rgba(255,255,255,0.92);
+    border-color: rgba(52, 152, 219, 0.3);
+}
+
+/* Icon */
+.tip-icon-modern {
+    width: 50px;
+    height: 50px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 12px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.10);
+}
+
+.tip-card-modern:hover .tip-icon-modern {
+    transform: scale(1.08) rotate(-2deg);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.gradient-blue { background: linear-gradient(135deg, #3498db, #2c80b9); }
+.gradient-green { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+.gradient-red { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+.gradient-orange { background: linear-gradient(135deg, #f39c12, #e67e22); }
+.gradient-purple { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+.gradient-teal { background: linear-gradient(135deg, #1abc9c, #16a085); }
+.gradient-pink { background: linear-gradient(135deg, #fd79a8, #e84393); }
+.gradient-indigo { background: linear-gradient(135deg, #6c5ce7, #4834d4); }
+
+/* Body */
+.tip-body-modern h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1a2634;
+    margin: 0 0 6px 0;
+}
+
+.tip-body-modern p {
+    font-size: 0.92rem;
+    color: #3d4a5a;
+    line-height: 1.5;
+    margin: 0 0 10px 0;
+}
+
+.tip-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #5d6d7e;
+    background: rgba(0,0,0,0.04);
+    padding: 4px 12px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .tips-grid-modern {
+        grid-template-columns: 1fr;
+    }
+    .tips-header-modern h2 {
+        font-size: 1.7rem;
+    }
+}
+/* Responsive */
+@media (max-width: 600px) {
+    .tips-grid {
+        grid-template-columns: 1fr;
+    }
+    .tip-card {
+        padding: 20px;
+    }
+    .tips-header h2 {
+        font-size: 1.6rem;
+    }
+}
+
+    /* ===== Buttons ===== */
+    .profile-actions {
+        margin-top: 40px;
+        text-align: center;
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+        animation: fadeInUp 1s ease 0.5s both;
+    }
+
+    .btn {
+        padding: 10px 30px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 500;
+        transition: background 0.3s ease, transform 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+    }
+
+    .btn-primary {
+        background: #3498db;
+        color: #fff;
+        border: none;
+    }
+    .btn-primary:hover {
+        background: #2980b9;
+        color: #fff;
+    }
+
+    .btn-secondary {
+        background: #ecf0f1;
+        color: #2c3e50;
+        border: none;
+    }
+    .btn-secondary:hover {
+        background: #dde1e3;
+        color: #2c3e50;
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 600px) {
+        .symptom-grid {
+            grid-template-columns: 1fr;
+        }
+        .page-title {
+            font-size: 1.5rem;
+        }
+        .tips-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<script>
+    function toggleCard(card) {
+        // Close other cards
+        var allCards = document.querySelectorAll('.symptom-card');
+        allCards.forEach(function(c) {
+            if (c !== card) {
+                c.classList.remove('active');
+            }
+        });
+        // Toggle current card
+        card.classList.toggle('active');
+    }
+
+    // Close cards when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.symptom-card')) {
+            var allCards = document.querySelectorAll('.symptom-card');
+            allCards.forEach(function(c) {
+                c.classList.remove('active');
+            });
+        }
+    });
+</script>
+{% endblock %}
